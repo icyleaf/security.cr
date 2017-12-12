@@ -1,28 +1,28 @@
 module Security
   class Keychain
-    getter keychain
+    getter path
 
-    def initialize(@keychain : String)
+    def initialize(@path : String)
     end
 
     # Unlock specified keychain
     def unlock(password)
-      system "security unlock-keychain -p #{password.shellescape} #{keychain.shellescape}"
+      system "security unlock-keychain -p #{password.shellescape} #{path.shellescape}"
     end
 
     # Lock specified keychain
     def lock
-      system "security lock-keychain #{keychain.shellescape}"
+      system "security lock-keychain #{path.shellescape}"
     end
 
     # Set default keychain for specified keychain
     def default!
-      system "security default-keychain #{keychain.shellescape}"
+      system "security default-keychain #{path.shellescape}"
     end
 
     # Change password for specified keychain
     def change_password(old_password : String, new_password : String)
-      system "security set-keychain-password -o #{old_password} -p #{new_password} #{keychain.shellescape}"
+      system "security set-keychain-password -o #{old_password} -p #{new_password} #{path.shellescape}"
     end
 
     # Set settings for specified keychain
@@ -32,7 +32,7 @@ module Security
         io << " -l" if lock_on_sleep
         io << " -u" if lock_after_timeout
         io << " -t #{timeout}" if timeout
-        io << " #{keychain.shellescape}"
+        io << " #{path.shellescape}"
       end.to_s
     end
 
@@ -40,7 +40,7 @@ module Security
     def info
       output = IO::Memory.new
       error = IO::Memory.new
-      command = "security show-keychain-info #{keychain.shellescape}"
+      command = "security show-keychain-info #{path.shellescape}"
       # NOTE: I don't know why get output use error, it issued both in ruby and crystal.
       status = Process.run command, shell: true, output: error, error: output
 
@@ -51,7 +51,7 @@ module Security
 
     # Delete keychain
     def delete
-      system "security delete-keychain #{keychain.shellescape}"
+      system "security delete-keychain #{path.shellescape}"
     end
 
     module Actions

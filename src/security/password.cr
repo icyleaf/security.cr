@@ -25,46 +25,46 @@ module Security
     module Actions
       CATEGORY = %w(generic internet)
 
-      def add(server : String, account : String, password : String, category = "generic", options = {} of Symbol => String)
+      def add(server : String, account : String, password : String, category = "generic", **options)
         options[:s] = server
         options[:a] = account
         options[:w] = password
 
         raise Exception.new "Unkown category: #{category}, avaiable in #{CATEGORY.join(", ")}" unless CATEGORY.includes?(category)
 
-        system "security add-#{category}-password #{flags_for_options(options)}"
+        system "security add-#{category}-password #{flags_for_password(options)}"
       end
 
       def find(**options)
-        find(options.to_h)
+        find options.to_h
       end
 
       def find(options : Hash(Symbol, String))
-        category = if options[:category]?
-                     options.delete :category
-                   else
-                     "generic"
-                   end
-
-        command = "security 2>&1 find-#{category}-password -g #{flags_for_options(options)}"
-        pp command
+        category = extracts_category(options)
+        command = "security 2>&1 find-#{category}-password -g #{flags_for_password(options)}"
         password_from_output `#{command}`
       end
 
       def delete(**options)
+        delete options.to_h
       end
 
-      private def flags_for_options(options : Hash(Symbol, String))
-        flags = options.dup
-        flag_key_for_options(flags, :account, :a)
-        flag_key_for_options(flags, :creator, :c)
-        flag_key_for_options(flags, :type, :C)
-        flag_key_for_options(flags, :kind, :D)
-        flag_key_for_options(flags, :value, :G)
-        flag_key_for_options(flags, :comment, :j)
-        flag_key_for_options(flags, :server, :s)
+      def delete(options : Hash(Symbol, String))
+        category = extracts_category(options)
+        command = "security 2>&1 delete-#{category}-password -g #{flags_for_password(options)}"
+        system "#{command}"
+      end
 
-        flags.delete_if { |k, v| v.nil? }.map { |k, v| "-#{k} #{v.shellescape}".strip }.join(" ")
+      private def flags_for_password(options : Hash(Symbol, String))
+        flags_for_options(options, {
+          :account => :a,
+          :creator => :c,
+          :type    => :C,
+          :kind    => :D,
+          :value   => :G,
+          :comment => :j,
+          :server  => :s,
+        })
       end
 
       private def password_from_output(output : String)
@@ -96,12 +96,15 @@ module Security
         Password.new keychain, password, attributes
       end
 
-      private def flag_key_for_options(options, long, short)
-        if value = options[long]?
-          options.delete long
-          options[short] ||= value
+      private def extracts_category(options)
+        if options[:category]?
+          options.delete :category
+        else
+          "generic"
         end
       end
+
+      include Security::Helper
     end
 
     extend Actions
