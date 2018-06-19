@@ -38,6 +38,8 @@ Security.unlock_keychain Security.default_keychain.path
 # Add internet password
 Security.add_internet_password(server: "test.example.com", account: "foo", password: "bar")
 
+# Find certificate
+Security::Certificate.find_certificate name: "github.com", keychain: Security.default_keychain.path
 ```
 
 ## Contributing
