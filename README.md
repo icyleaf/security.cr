@@ -1,10 +1,7 @@
 # security.cr
 
-![Language](https://img.shields.io/badge/language-crystal-black.svg)
-[![Tag](https://img.shields.io/github/tag/icyleaf/security.cr.svg)](https://github.com/icyleaf/security.cr/blob/master/CHANGELOG.md)
-[![Dependency Status](https://shards.rocks/badge/github/icyleaf/security.cr/status.svg)](https://shards.rocks/github/icyleaf/security.cr)
-[![devDependency Status](https://shards.rocks/badge/github/icyleaf/security.cr/dev_status.svg)](https://shards.rocks/github/icyleaf/security.cr)
-[![License](https://img.shields.io/github/license/icyleaf/security.cr.svg)](https://github.com/icyleaf/security.cr/blob/master/LICENSE)
+[![Language](https://img.shields.io/badge/language-crystal-776791.svg)](https://github.com/crystal-lang/crystal)
+[![Tag](https://img.shields.io/github/tag/icyleaf/security.cr.svg)](https://github.com/icyleaf/pngdefry.cr/blob/master/CHANGELOG.md)
 
 macOS security command-line tool wrapper written by Crystal.
 
@@ -42,14 +39,16 @@ Security.add_internet_password(server: "test.example.com", account: "foo", passw
 Security::Certificate.find_certificate name: "github.com", keychain: Security.default_keychain.path
 ```
 
-## Contributing
+## How to Contribute
 
-1. Fork it ( https://github.com/icyleaf/security.cr/fork )
-2. Create your feature branch (git checkout -b my-new-feature)
-3. Commit your changes (git commit -am 'Add some feature')
-4. Push to the branch (git push origin my-new-feature)
-5. Create a new Pull Request
+Your contributions are always welcome! Please submit a pull request or create an issue to add a new question, bug or feature to the list.
 
-## Contributors
+All [Contributors](https://github.com/icyleaf/pngdefry.cr/graphs/contributors) are on the wall.
 
-- [icyleaf](https://github.com/icyleaf) - creator, maintainer
+## You may also like
+
+- [pngdefry.cr](https://github.com/icyleaf/pngdefry.cr) - Pngdefry.cr is a wrapper for pngdefry written by Crystal.
+
+## License
+
+[MIT License](https://github.com/icyleaf/security.cr/blob/master/LICENSE) © icyleaf
